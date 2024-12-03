@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+<form action="sendMessage.php" method="post" name="form">
+    <p>
+        <label form="author">Автор:</label><br>
+        <input name="author" type="text" id="author" required>
+        
+    </p>
+    <p>
+            <label for="_message ">Текст сообщения:</label><br>
+            <textarea name="message" rows="5" cols="50" id="message" required></textarea>
+    </p>
+    <p>
+    <input name="button" type="submit" value="Отправить" id="send"> <span id="resp"></span>
+    </p>
+</form>
+</body>
+<script type="text/javascript" src="jquery-3.7.1.js"></script>
+<script type="text/javascript">
+    $(function(){
+        $("#send").click(function(){
+            var author = $("#author").val();
+            var message  = $("#message").val();
+            $.ajax({
+                type: "POST",
+                url: "sendMessage.php",
+                data: {"author": author, "message": message},
+                cache: false,
+                success: function(response){
+                    var messageResp = new Array('Ваше сообщение отправлено', 'Сообщение не отправлено Ошибка базы данных', 'Нельзя отправлять пустые сообщения');
+                    var resultStat = messageResp[Number(response)];
+                    if(response == 0){
+                        $("#author").val("");
+                        $("#message").val("");
+                    }
+                    $("#resp").text(resultStat) .show() .delay(1500) .fadeOut(800);
+                }
+            });
+            return false;
+        })
+    })
+</script>
+</html>

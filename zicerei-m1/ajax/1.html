@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>primer1</title>
+</head>
+<body>
+    <a href="#" onclick="startAjax('handler_script.php');">Запустить php скрипт</a>
+    <div id="console" style="border: 1px solid rgb(233, 209, 209);width: 250px; height: 110px; padding: 10px; background: rgb(255, 181, 181);"> Консоль выполнения запроса: </div>
+<br/>
+<div id="printResult">После нажатия на ссылку, тут будет сообщение с сервера!</div>
+</body>
+<script>
+function startAjax(url) {
+        var request=new XMLHttpRequest();
+        request.onreadystatechange = function(){
+            switch (request.readyState){
+                case 1: print_console("<br><em>1:подготовка к отправке...</em></br>"); break;
+                case 2: print_console("<br><em>2: отправлен...</em></br>");break;
+                case 3: print_console("<br><em>3: идет обмен...</em></br>");break;
+                case 4: {
+                    if(request.status==200){
+                        print_console("<br/><em>4: обменн завершен.</em>");
+                        document.getElementById("printResult").innerHTML = "<br>"+request.responseText+"</br>";
+
+                    }
+                    else if(request.status==404){
+                        alert("Ошибка: запрашиваемый скрипт не найден!");
+                    }
+                    else alert("Ошибка: сервер вернул статус: "+ request.status);
+                    break;
+                }
+            }
+        }
+        request.open ('GET', url, true);
+        request.send ('');
+    }
+function print_console(text){
+    document.getElementById("conosle").innerHTML += text;
+}
+</script>
+</html>
